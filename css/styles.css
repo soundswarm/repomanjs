@@ -1,0 +1,44 @@
+
+.panel {
+  height: 160px;
+  overflow-y: auto;
+}
+.panel-heading {
+  font: 100px;
+}
+body {
+  margin-left: 10px;
+}
+
+.list-group-item {
+  padding: 1px;
+  border: none;
+}
+
+.form-inline {
+	margin-bottom: 40px;
+}
+
+.error {
+	color: red;
+	font-size: 20px
+}
+
+.signIn {
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: auto;
+  width: 40%;
+  text-align: center;
+}
+
+.button-block, .signIn {
+  width: 200px;
+}
+
+.totalLanguages {
+  width: 175px;
+}
+
+
