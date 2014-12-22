@@ -1,13 +1,15 @@
-
-.panel {
-  height: 160px;
-  overflow-y: auto;
-}
-.panel-heading {
-  font: 100px;
-}
 body {
   margin-left: 10px;
+}
+
+.error {
+  color: red;
+  font-size: 20px;
+}
+
+.form-inline {
+  margin-bottom: 40px;
+  padding-left: 28px
 }
 
 .list-group-item {
@@ -15,13 +17,13 @@ body {
   border: none;
 }
 
-.form-inline {
-	margin-bottom: 40px;
+.panel {
+  height: 160px;
+  overflow-y: auto;
 }
 
-.error {
-	color: red;
-	font-size: 20px
+.panel-heading {
+  font: 100px;
 }
 
 .signIn {
@@ -29,12 +31,14 @@ body {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: auto;
-  width: 40%;
   text-align: center;
 }
-
 .button-block, .signIn {
   width: 200px;
+}
+
+.reposLanguages {
+  padding-left: 28px;
 }
 
 .totalLanguages {

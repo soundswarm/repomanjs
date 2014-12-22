@@ -1,6 +1,4 @@
-/**
-  * Initialization Oauth.io
-  */
+//Initialization of Oauth.io
 var Oauth = (function(){
   //oauth.io authentication
   OAuth.initialize('vMLd_AIdnpZtRPRH61n9z4j8RS8', {cache: true});
@@ -15,43 +13,33 @@ var Oauth = (function(){
   }  
 })();
 
-/**
- * After login
- */
+//after login
 function doEverything() {
   OAuth.popup('github', {cache: true}, function (error, result) {
 
-    //handle error with error
-    //use result.access_token in your API request
+    //console.log(error);
+
     $$('.signIn').hide();
-    $$('#createRepo, #addUser, #listRepos').show();
-        
+    $$('#createRepo, #addUser, #listRepos, #languages').show();     
 
-      //urls used in API calls
-      var apiUrl = "https://api.github.com";
-      var access_token = result.access_token;
-      var tokenUrl ='?access_token='+access_token;
-      var userUrl = apiUrl+'/user'+tokenUrl;
-      var authRepoUrl = apiUrl+'/user/repos'+tokenUrl;
-      var authAddUserUrl = apiUrl+'/user/match/collaborators'+tokenUrl;
+    //urls used in API calls. 
+    var apiUrl = "https://api.github.com";
+    var access_token = result.access_token;
+    var tokenUrl ='?access_token='+access_token;
+    var userUrl = apiUrl+'/user'+tokenUrl;
+    var authRepoUrl = apiUrl+'/user/repos'+tokenUrl;
+    var authAddUserUrl = apiUrl+'/user/match/collaborators'+tokenUrl;
 
-
-    //next steps
-    //getRepos. 
-    //getLanguages. 
-    //processRepos:  display repos.  calcLangPerc. display repo languages, calcTotalLang. display total lang
-    //
-
-    //get array of repo objects
+    //get array of repo objects from github
     var getRepos = function (authRepoUrl){
       return $$.ajax({
         url: authRepoUrl,
         type: 'GET',
         data: {'sort': 'updated', 'per_page': 100},
-        
       });
     };
 
+    //get the bytes of code of the languages in each repo
     var getReposLanguages = function(repos) {
       return Promise.all(repos.map(function(repo) {
         return $$.ajax({
@@ -66,6 +54,7 @@ function doEverything() {
       })
     };
 
+    //process and display information about repos
     var processRepos = function(repos) {
 
       //turn object into array then sort array
@@ -78,7 +67,7 @@ function doEverything() {
         return array;
       };
 
-      //calculate the total bytes of languages in all repos
+      //calculate the total bytes of code for the languages in all repos
       var ReposTotalSizes = function(repos){
         var sizes = function(repos) {
           var totals = {};
@@ -88,10 +77,10 @@ function doEverything() {
               totals[lang] = totals[lang]? totals[lang] + languages[lang] : languages[lang];
             });
           });
-          console.log(totals);
           return totals;
         };
         
+        //display bytes of code for the languages in all repos
         var displaySizes = function(totals) {
           var reposLanguages = sortObject(totals);
           var output = '<ul class="list-group totalLanguages"> ';
@@ -103,16 +92,17 @@ function doEverything() {
         };
         var totals = sizes(repos);
         displaySizes(totals);
-      }; 
+      }(repos); 
 
-      //format the repos into buttons and display them
+      //format the repos into panels and display them
       var parseRepo = function(repo){
-        //display repo html on the page
+        
+        //display formatted repo html on the page
         var render = function(htmlString) {
           $$('.repos').append(htmlString);
         };
 
-        //count total bytes of repo. argument is object of languages
+        //count total bytes of code for languages in each repo. Argument is github object of languages
         var repoBytes = function(repoLangs) {
           var totalBytes=0;
           for(key in repoLangs) {
@@ -121,23 +111,20 @@ function doEverything() {
           };
           return totalBytes;
         };
-      
-        //var totalB = repoBytes(repo.languages);
-        //format the repos into buttons/links and checkboxes
         
+        //format html
         var output = '<div class="col-md-2">';
         output += '<div class="panel panel-default">';
         output += '<div class="panel-heading">';
         output += '<label class="btn btn-primary"> <input type="checkbox" id=' + repo.name + '></label> ';//checkbox
         output += '<a href=' + repo.html_url + ' class="'+repo.name+'">' + repo.name + '</a>';
         output += '</div>'
+
+        output += '<div class="panel-body">';
+        output += '<ul class="list-group languages">';        
         
-
-        output += ' <div class="panel-body">';
-        output += '<ul class="list-group languages"> ';        
-        var langArray = sortObject(repo.languages);
-
         //calculate the languages' percentage of it's repo's total byte size
+        var langArray = sortObject(repo.languages);
         for (var i =0;i< langArray.length ;i++) {
           var languagePercentage = Math.round(langArray[i][1]/repoBytes(repo.languages)*100)
           output += '<li class="list-group-item language">' + langArray[i][0] + ':  ' + '<span class="badge">'+languagePercentage+'%'+'</span>' + '</li>'; 
@@ -147,15 +134,16 @@ function doEverything() {
         output += '</div>';
         output += '</div>';
 
+        //display formatted html
         render(output);
       };
 
       repos.forEach(parseRepo);
-      ReposTotalSizes(repos);
     }
+
     getRepos(authRepoUrl).then(getReposLanguages).then(processRepos);
     
-
+    //create and diaplay new repo
     var createRepo = function(authRepoUrl) {
       //POST new repo to github
       var postRepo = function(repoName) {
@@ -179,13 +167,10 @@ function doEverything() {
       }); 
     }(authRepoUrl);
     //when create button is clicked, create a new repo and display it
-    
-
-//I added $$ to all jquery except ajax before this point
-    
-    var collaborator = function() {
-      
-      //add collaborator to repo(s) function
+        
+    //add new collaborator to repo(s) and display user's gravatar    
+    var collaborator = function() {  
+      //add collaborator to repo(s)
       var addCollaborator = function(userAdded, repo) { 
         var postUser = function(userAdded, repo) {
           $$.ajax({
@@ -220,7 +205,7 @@ function doEverything() {
         };
       };
 
-    //when add button is clicked, add new user to repos
+      //when add button is clicked, add new user to repos
       $$('.add').on('click', function () {
         event.preventDefault();
         var repos = $$("input[type=checkbox]:checked");
@@ -236,7 +221,6 @@ function doEverything() {
         };
       });
     }();
-    
 
   });
 };

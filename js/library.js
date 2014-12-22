@@ -2,8 +2,6 @@
 
 //create a jquery-like library called $$
 (function() {
-	
-	//
 	var $$ = function(elements) {
 		return new Library(elements);
 	};
@@ -92,9 +90,6 @@
 
 	//similiar to jquery ajax.  However, input must be an object. 
 	$$.ajax =  function(input) {
-		//CORRECT THE URL
-		//add input.data parameters to the end of the url
-
 		return new Promise(function(resolve,reject) {
 			var httpRequest;
 			if (window.XMLHttpRequest) { // Mozilla, Safari, IE7+ ...
@@ -102,18 +97,19 @@
 			} else if (window.ActiveXObject) { // IE 6 and older
 			    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
 			};
+
+			//the responses to the ajax call
 			var response = function() {
 				if(httpRequest.readyState === 4) {
 					if(httpRequest.status >= 200 && httpRequest.status <300) {
-						if(input.success) {
+						if(input.success) {//input.success is a callback function entered when calling $$.ajax
 							if(input.type==='PUT') {
 								resolve(input.success(httpRequest.response));
 							} else {
 								resolve(input.success(JSON.parse(httpRequest.response)));
 							}
-							
 						} else {
-							resolve(JSON.parse(httpRequest.response));
+							resolve(JSON.parse(httpRequest.response)); //returns the result of the ajax call
 						};
 					};
 				};
@@ -148,38 +144,6 @@
 	};
 
 	if(!window.$$) {
-		window.$$ = $$;
+		window.$$ = $$; 
 	};
 })();
-
-
-//User Class.  Argument = Github JSON
-var User = function(userName, apiUrl, tokenUrl) {
-	this.apiUrl = apiUrl;
-	this.user = userName;
-	this.tokenUrl = tokenUrl;
-
-	this.authReposUrl = this.apiUrl+'/user/repos'+this.tokenUrl;
-	//this.repos = this.getRepos(this.authReposUrl);
-	//this.languages = getLanguages();
-
-	this.prototype.getRepos = function(){
-		var promise = $.Deferred();
-		$.ajax({
-		  url: this.authReposUrl,
-		  type: 'GET',
-		  data: {'sort': 'updated'}, 
-		  success: function(result) {
-		  	promise.resolve(result);
-		  }
-		});
-		return promise;
-	}
-	//this.prototype.getLanguages = function() {};
-};
-
-
-
-
-
-
