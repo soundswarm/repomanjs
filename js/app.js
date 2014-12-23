@@ -117,7 +117,7 @@ function doEverything() {
         output += '<div class="panel panel-default">';
         output += '<div class="panel-heading">';
         output += '<label class="btn btn-primary"> <input type="checkbox" id=' + repo.name + '></label> ';//checkbox
-        output += '<a href=' + repo.html_url + ' class="'+repo.name+'">' + repo.name + '</a>';
+        output += '<a href=' + repo.html_url + ' target="_blank" class="'+repo.name+'">' + repo.name + '</a>';
         output += '</div>'
 
         output += '<div class="panel-body">';
