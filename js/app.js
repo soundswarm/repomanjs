@@ -112,7 +112,7 @@ function doEverything() {
           return totalBytes;
         };
         
-        //format html
+        //format html.
         var output = '<div class="col-md-2">';
         output += '<div class="panel panel-default">';
         output += '<div class="panel-heading">';
