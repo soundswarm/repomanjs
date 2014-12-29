@@ -11,7 +11,12 @@ body {
   margin-bottom: 40px;
   padding-left: 28px
 }
-
+.img-responsive {
+  height: 34px;
+  width: 34px;
+  display: initial;
+  margin-left: 10px;
+}
 .list-group-item {
   padding: 1px;
   border: none;

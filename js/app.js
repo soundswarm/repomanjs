@@ -112,12 +112,12 @@ function doEverything() {
           return totalBytes;
         };
         
-        //format html
+        //format html.
         var output = '<div class="col-md-2">';
         output += '<div class="panel panel-default">';
         output += '<div class="panel-heading">';
         output += '<label class="btn btn-primary"> <input type="checkbox" id=' + repo.name + '></label> ';//checkbox
-        output += '<a href=' + repo.html_url + ' class="'+repo.name+'">' + repo.name + '</a>';
+        output += '<a href=' + repo.html_url + ' target="_blank" class="'+repo.name+'">' + repo.name + '</a>';
         output += '</div>'
 
         output += '<div class="panel-body">';
@@ -156,8 +156,21 @@ function doEverything() {
 
       //display new repo
       var renderRepo = function(repo) {
-        var content = '<div class="list-group-item"> <a href='+repo.html_url+' class="btn btn-primary">'+repo.name+ '</a> <label class="btn btn-primary"> <input type="checkbox" id='+ repo.name+'> add collaborator </label></div>';
-        $$('.repos').prepend(content);
+         //format html.
+        var output = '<div class="col-md-2">';
+        output += '<div class="panel panel-default">';
+        output += '<div class="panel-heading">';
+        output += '<label class="btn btn-primary"> <input type="checkbox" id=' + repo.name + '></label> ';//checkbox
+        output += '<a href=' + repo.html_url + ' target="_blank" class="'+repo.name+'">' + repo.name + '</a>';
+        output += '</div>'
+
+        output += '<div class="panel-body">';
+
+        output += '</div>';
+        output += '</div>';
+        output += '</div>';
+
+        $$('.repos').prepend(output);
       };
       
       $$('.create').on('click', function() {
